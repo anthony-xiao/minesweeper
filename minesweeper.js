@@ -2,25 +2,43 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
 var board = {
-  cells: [
-    {row: 0, col: 0, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0}, 
-    {row: 0, col: 1, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0}, 
-    {row: 0, col: 2, isMine: true, isMarked: false, hidden: true, sourroundingMines: 0}, 
-    {row: 1, col: 1, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0},
-    {row: 1, col: 0, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0},
-    {row: 1, col: 2, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0},
-    {row: 2, col: 0, isMine: true, isMarked: false, hidden: true, sourroundingMines: 0},
-    {row: 2, col: 1, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0},
-    {row: 2, col: 2, isMine:'', isMarked: false, hidden: true, sourroundingMines: 0}
-  ]
+  cells: []
 };
+  var sides = 3;
+
+  for (var x = 0; x < sides; x++) {
+    for (var y = 0; y < sides; y++) {
+      var cellNumber = cellNumber++
+      board.cells.push ({
+        row: x,
+        col: y,
+        isMine: Math.floor(Math.random()*2),
+        isMarked: false,
+        hidden: true,
+        surroundingMines: 0
+      })
+    }
+  }
+  
+/*    {row: 0, col: 0, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
+    {row: 0, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
+    {row: 0, col: 2, isMine: true, isMarked: false, hidden: true, sourroundingMines: 0}, 
+    {row: 1, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0},
+    {row: 1, col: 0, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0},
+    {row: 1, col: 2, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0},
+    {row: 2, col: 0, isMine: true, isMarked: false, hidden: true, sourroundingMines: 0},
+    {row: 2, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0},
+    {row: 2, col: 2, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}
+  ]
+};*/
 
 function startGame () {
-  // Don't remove this function call: it makes the game work!
   for (let i = 0; i < board.cells.length; i++)
-    var surroundingMines = countSurroundingMines (board.cells[i]);
-   
-  lib.initBoard()  
+  countSurroundingMines (board.cells[i]);
+  // Don't remove this function call: it makes the game work!
+  lib.initBoard();
+  document.addEventListener("click", checkForWin);
+  document.addEventListener("contextmenu", checkForWin);
 }
 
 
@@ -30,6 +48,17 @@ function startGame () {
 // 2. Are all of the mines marked?
 function checkForWin () {
 
+  for (var c = 0; c < board.cells.length; c++) {
+    var check = board.cells[c];
+    if (check.isMine && check.isMarked && !check.hidden) {
+      lib.displayMessage('You win!');
+      } else if (check.isMarked && check.hidden) {
+        return;
+        } else if (check.isMine && !check.isMarked) {
+        return;
+        }
+      }
+    
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
@@ -44,11 +73,26 @@ function checkForWin () {
 // It will return cell objects in an array. You should loop through 
 // them, counting the number of times `cell.isMine` is true.
 function countSurroundingMines (cell) {
-  var surroundingCells = lib.getSurroundingCells(cell.row, cell.col);
-  var surroundingMines = 0
-  for (var i = 0; i<surroundingCells.length; i++)
-  if (surroundingCells[i].isMine === true) {
-    surroundingMines++
+  var surrounding = lib.getSurroundingCells(cell.row, cell.col);
+  var count = 0
+  for (var i = 0; i<surrounding.length; i++) {
+    if (surrounding[i].isMine) {
+    count++
+    }
   }
-  return surroundingMines; 
+  board.cells[surroundingMines] = number(count);
 }
+
+/*
+function countNumberOfIsMine () {
+  var numberOfCells = board.cells.length;
+  isMineCount = 0;
+  for (var i = 0; i < numberOfCells.length; i++)
+  if (board.cells.isMine) {
+  isMineCount++
+  }
+  return isMineCount;
+  console.log (isMineCount);
+}
+
+*/
