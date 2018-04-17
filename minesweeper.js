@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', startGame)
 var board = {
   cells: []
 };
-  var sides = 4;
+  var sides = 6;
 
   for (var x = 0; x < sides; x++) {
     for (var y = 0; y < sides; y++) {
@@ -34,12 +34,14 @@ var board = {
 }; */
 
 function startGame () {
-  for (let i = 0; i < board.cells.length; i++)
-  countSurroundingMines (board.cells[i]);
+ 
   // Don't remove this function call: it makes the game work!
   lib.initBoard();
+  for (let i = 0; i < board.cells.length; i++)
+  board.cells[i].surroundingMines = countSurroundingMines (board.cells[i]);
   document.addEventListener("click", checkForWin);
   document.addEventListener("contextmenu", checkForWin);
+  
 }
 
 
@@ -82,16 +84,11 @@ function countSurroundingMines (cell) {
   return count;
 }
 
-/*
-function countNumberOfIsMine () {
-  var numberOfCells = board.cells.length;
-  isMineCount = 0;
-  for (var i = 0; i < numberOfCells.length; i++)
-  if (board.cells.isMine) {
-  isMineCount++
-  }
-  return isMineCount;
-  console.log (isMineCount);
+function cleanBoard () {
+  document.getElementsByClassName('board')[0].innerHTML = "";
 }
 
-*/
+function restart () {
+  cleanBoard();
+  startGame();
+}
