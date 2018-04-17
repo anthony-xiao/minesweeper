@@ -1,25 +1,29 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
-var board = {
-  cells: []
-};
-  var sides = 6;
 
-  for (var x = 0; x < sides; x++) {
-    for (var y = 0; y < sides; y++) {
-      var cellNumber = cellNumber++
-      board.cells.push ({
-        row: x,
-        col: y,
-        isMine: Math.floor(Math.random()*2),
-        isMarked: false,
-        hidden: true,
-        surroundingMines: 0
-      })
+var board;
+
+function createBoard() {
+  var board = {
+    cells: []
+  };
+    var sides = 6;
+    for (var x = 0; x < sides; x++) {
+      for (var y = 0; y < sides; y++) {
+        var cellNumber = cellNumber++
+        board.cells.push ({
+          row: x,
+          col: y,
+          isMine: Math.floor(Math.random()*2),
+          isMarked: false,
+          hidden: true,
+          surroundingMines: 0
+        })
+      }
     }
+    return board;
   }
-
   /*
     {row: 0, col: 0, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
     {row: 0, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
@@ -34,14 +38,14 @@ var board = {
 }; */
 
 function startGame () {
- 
+  board = createBoard();
   // Don't remove this function call: it makes the game work!
-  lib.initBoard();
   for (let i = 0; i < board.cells.length; i++)
   board.cells[i].surroundingMines = countSurroundingMines (board.cells[i]);
   document.addEventListener("click", checkForWin);
+  document.addEventListener("click", boom);
   document.addEventListener("contextmenu", checkForWin);
-  
+  lib.initBoard();
 }
 
 
@@ -59,6 +63,7 @@ function checkForWin () {
     } 
   }
   lib.displayMessage('You win!');
+  playAudio('winningSound');
 }
     
   // You can use this function call to declare a winner (once you've
@@ -85,10 +90,33 @@ function countSurroundingMines (cell) {
 }
 
 function cleanBoard () {
-  document.getElementsByClassName('board')[0].innerHTML = "";
+  for (var i = 0; i < board.cells.length; i++) {
+  document.getElementsByClassName('board')[0].innerHTML = '';
+  }
 }
+
 
 function restart () {
   cleanBoard();
   startGame();
+  pauseAudio('winningSound');
+}
+
+function playAudio (sound) {
+  var i = document.getElementById(sound)
+  i.play();
+}
+
+function pauseAudio (sound) {
+  var i = document.getElementById(sound)
+  i.pause();
+}
+
+function boom() {
+  for (var x = 0; x < board.cells.length; x++) {
+    var check = board.cells[x];
+    if (check.isMine && !check.hidden) {
+      playAudio('koSound');
+    } 
+  }
 }

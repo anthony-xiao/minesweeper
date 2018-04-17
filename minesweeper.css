@@ -4,6 +4,10 @@ html, body {
 }
 
 body {
+  background-image: url("images/start.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: flex-center;
@@ -44,7 +48,7 @@ body {
 }
 
 div.mine, div.mine:hover {
-  background: no-repeat center/60% url("images/bomb.svg") crimson;
+  background: no-repeat center/100% url("images/KO.jpg");
 }
 
 div.hidden {
@@ -56,5 +60,5 @@ div.hidden:hover {
 }
 
 div.marked, div.marked:hover {
-  background: no-repeat center/60% url("images/mark.svg") deepskyblue;
+  background: no-repeat center/100% url("images/x.jpg");
 }
