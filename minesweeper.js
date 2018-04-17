@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', startGame)
 var board = {
   cells: []
 };
-  var sides = 3;
+  var sides = 4;
 
   for (var x = 0; x < sides; x++) {
     for (var y = 0; y < sides; y++) {
@@ -19,8 +19,9 @@ var board = {
       })
     }
   }
-  
-/*    {row: 0, col: 0, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
+
+  /*
+    {row: 0, col: 0, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
     {row: 0, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}, 
     {row: 0, col: 2, isMine: true, isMarked: false, hidden: true, sourroundingMines: 0}, 
     {row: 1, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0},
@@ -30,7 +31,7 @@ var board = {
     {row: 2, col: 1, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0},
     {row: 2, col: 2, isMine: false, isMarked: false, hidden: true, sourroundingMines: 0}
   ]
-};*/
+}; */
 
 function startGame () {
   for (let i = 0; i < board.cells.length; i++)
@@ -50,18 +51,18 @@ function checkForWin () {
 
   for (var c = 0; c < board.cells.length; c++) {
     var check = board.cells[c];
-    if (check.isMine && check.isMarked && !check.hidden) {
+    if (check.isMine && check.hidden) {
+      return; 
+    } else if (check.isMine && !check.isMarked) {
+      return;
+    } else {
       lib.displayMessage('You win!');
-      } else if (check.isMarked && check.hidden) {
-        return;
-        } else if (check.isMine && !check.isMarked) {
-        return;
-        }
-      }
+    }
     
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
   //   lib.displayMessage('You win!')
+}
 }
 
 // Define this function to count the number of mines around the cell
@@ -80,7 +81,7 @@ function countSurroundingMines (cell) {
     count++
     }
   }
-  board.cells[surroundingMines] = number(count);
+  return count;
 }
 
 /*
